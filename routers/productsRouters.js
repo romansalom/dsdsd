@@ -21,11 +21,7 @@ routerProducts.post("/productos" , async (req,res) =>{
     const nuevoProducto = req.body
     productos.push(nuevoProducto);
     fs.writeFileSync("./productos.json" , JSON.stringify(productos),(err)=>{
-        const productos ={
-            nombre: this.nombre ,
-            precio : this.precio , 
-            id: ProductManager.id
-        };
+       
         throw new Error(err)
         
     })
