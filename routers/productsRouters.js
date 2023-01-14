@@ -47,12 +47,21 @@ routerProducts.post("/productos" , async (req,res) =>{
 
     res.send("objeto creado ")
 });
-routerProducts.get('/productos/:id', async (req,res)=>{
-    const id = req.query.id;
+//routerProducts.get('/productos/:id', async (req,res)=>{
+ //   const id = req.query.id;
 
 
-    res.send(productos.find(e =>parseInt(e.id) == parseInt( req.params.id)));
-});
+  //  res.send(productos.find(e =>parseInt(e.id) == ( req.//params.id)));
+//});
+
+
+routerProducts.get('/productos/:pid' , (req,res)=>
+{
+    let {pid}=  req.params;
+
+    const producto = productos.find(e => e.id === pid);
+    res.send(producto)
+})
 
 module.exports =
     routerProducts;
