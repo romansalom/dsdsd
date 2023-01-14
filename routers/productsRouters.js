@@ -9,6 +9,9 @@ const todoslosProductos = JSON.parse(fs.readFileSync("./productos.json" , "utf8"
     throw Error(error)
 }));
 
+
+
+
 productos.push(...todoslosProductos);
 
 routerProducts.get("/productos", async (req,res)=>{
@@ -18,16 +21,38 @@ routerProducts.get("/productos", async (req,res)=>{
 });
 
 routerProducts.post("/productos" , async (req,res) =>{
-    const nuevoProducto = req.body
+
+    const generadorID = () =>{
+        let id = 1;
+
+        const elUltimoElemento = productos[productos.length -1];
+        
+        if(elUltimoElemento){
+            id = elUltimoElemento.id + 1}
+        return id ;
+    }
+
+    const idGenerado = generadorID();
+
+    const nuevoProducto = {...req.body, id:idGenerado};
     productos.push(nuevoProducto);
     fs.writeFileSync("./productos.json" , JSON.stringify(productos),(err)=>{
+    
+        
+   
        
         throw new Error(err)
         
     })
 
     res.send("objeto creado ")
-})
+});
+routerProducts.get('/productos/:id', async (req,res)=>{
+    const id = req.query.id;
+
+
+    res.send(productos.find(e =>parseInt(e.id) == parseInt( req.params.id)));
+});
 
 module.exports =
     routerProducts;
