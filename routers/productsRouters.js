@@ -59,7 +59,7 @@ routerProducts.get('/productos/:pid' , (req,res)=>
 {
     let {pid}=  req.params;
 
-    const producto = productos.find(e => e.id === pid);
+    const producto = productos.find(e => parseInt(e.id) === parseInt(pid));
     res.send(producto)
 })
 
