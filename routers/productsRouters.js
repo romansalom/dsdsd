@@ -47,12 +47,7 @@ routerProducts.post("/productos" , async (req,res) =>{
 
     res.send("objeto creado ")
 });
-//routerProducts.get('/productos/:id', async (req,res)=>{
- //   const id = req.query.id;
 
-
-  //  res.send(productos.find(e =>parseInt(e.id) == ( req.//params.id)));
-//});
 
 
 routerProducts.get('/productos/:pid' , (req,res)=>
@@ -62,6 +57,23 @@ routerProducts.get('/productos/:pid' , (req,res)=>
     const producto = productos.find(e => parseInt(e.id) === parseInt(pid));
     res.send(producto)
 })
+
+routerProducts.put("/pid" , (req,res) =>{
+    const {pid} = req.params;
+    const productos = req.body;
+    const index = productos.find(e => parseInt(e.id) === parseInt(pid));
+    res.send(index);
+    if(index){
+        productos[index]={
+            ...productos,
+            id: pid,
+        }
+        res.send('producto actualizadp');
+    }else{
+        res.status(400).send("no hay producto con ese id");
+    }
+
+});
 
 module.exports =
     routerProducts;
