@@ -60,14 +60,15 @@ routerProducts.get('/productos/:pid' , (req,res)=>
 
 routerProducts.put("/:pid" , (req,res) =>{
     const {pid} = req.params;
-    const productos = req.body;
+    const producto = req.body;
     const index = productos.find(e => parseInt(e.id) === parseInt(pid));
     res.send(index);
     if(index){
-        productos[index]={
+        producto[index]={
             ...productos,
             id: pid,
         }
+        
         res.send('producto actualizadp');
     }else{
         res.status(400).send("no hay producto con ese id");
