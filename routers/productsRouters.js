@@ -58,7 +58,7 @@ routerProducts.get('/productos/:pid' , (req,res)=>
     res.send(producto)
 })
 
-routerProducts.put("/pid" , (req,res) =>{
+routerProducts.put("/:pid" , (req,res) =>{
     const {pid} = req.params;
     const productos = req.body;
     const index = productos.find(e => parseInt(e.id) === parseInt(pid));
