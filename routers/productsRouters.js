@@ -2,9 +2,10 @@
 const express = require("express");
 const routerProducts = express.Router();
 const fs = require("fs");
-
-const productos =[];
-
+const { v4: uuidv4} = require('uuid');
+const products = [
+    
+]
 const todoslosProductos = JSON.parse(fs.readFileSync("./productos.json" , "utf8", (error)=>{
     throw Error(error)
 }));
@@ -12,69 +13,75 @@ const todoslosProductos = JSON.parse(fs.readFileSync("./productos.json" , "utf8"
 
 
 
-productos.push(...todoslosProductos);
+products.push(...todoslosProductos);
 
-routerProducts.get("/productos", async (req,res)=>{
-    const limit = req.query.limit;
-    if(limit) return res.send(productos.slice(0,limit))
-    res.send(productos)
+
+routerProducts.get('/',(req,res) =>{
+    res.send(products)
+});
+routerProducts.get('/:pid',(req,res) =>{
+
+    let {pid} = req.params;
+    const product = products.find(p => p.id === pid);
+    res.send(product)
 });
 
-routerProducts.post("/productos" , async (req,res) =>{
+routerProducts.post('/' , (req,res) =>{
 
-    const generadorID = () =>{
-        let id = 1;
+const product = req.body;
+products.push({
+   ...product,
+    id: uuidv4()
+})
+const nuevoProducto = {...req.body, id:uuidv4()};
+products.push(nuevoProducto);
+fs.writeFileSync("./productos.json" , JSON.stringify(products),(err)=>{
 
-        const elUltimoElemento = productos[productos.length -1];
-        
-        if(elUltimoElemento){
-            id = elUltimoElemento.id + 1}
-        return id ;
-    }
-
-    const idGenerado = generadorID();
-
-    const nuevoProducto = {...req.body, id:idGenerado};
-    productos.push(nuevoProducto);
-    fs.writeFileSync("./productos.json" , JSON.stringify(productos),(err)=>{
     
-        
+
    
-       
-        throw new Error(err)
-        
+    throw new Error(err)
+    
+})
+res.send('producto agregado')
+
+});
+
+routerProducts.put('/:pid' , (req,res) =>{
+    const {pid} = req.params;
+    const product = req.body;
+    const index = products.findIndex(p=> p.id ===pid);
+    if(!!!index){
+products[index] = {
+    ...product,
+    id : pid
+}
+res.send('prodcutto modificado')
+    }else{
+        res.status(400).send('no existe un producto con ese id');    }
+    
     })
 
-    res.send("objeto creado ")
-});
 
 
+    routerProducts.delete('/:pid' , (req,res) =>{
+        const pid = req.params.id;
+        const product = req.body;
+        let currentLenght = products.lenght;
 
-routerProducts.get('/productos/:pid' , (req,res)=>
-{
-    let {pid}=  req.params;
-
-    const producto = productos.find(e => parseInt(e.id) === parseInt(pid));
-    res.send(producto)
-})
-
-routerProducts.put("/:pid" , (req,res) =>{
-    const {pid} = req.params;
-    const producto = req.body;
-    const index = productos.find(e => parseInt(e.id) === parseInt(pid));
-    res.send(index);
-    if(index){
-        producto[index]={
-            ...productos,
-            id: pid,
-        }
+        productoaborrar = products.filter(p => {p.pid- ! pid})
         
-        res.send('producto actualizadp');
-    }else{
-        res.status(400).send("no hay producto con ese id");
-    }
+        if(products.length===currentLenght){
+   
+    return res.status('404').send({status:error, error:"not user found"})
+        }
+        res.send({status:"succes", error:"usario borrado"})
+        })
+    
 
-});
+
+
+
 
 module.exports =
     routerProducts;
