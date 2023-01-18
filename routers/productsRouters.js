@@ -69,7 +69,7 @@ res.send('prodcutto modificado')
         const product = req.body;
         let currentLenght = products.lenght;
 
-        productoaborrar = products.filter(p => {p.pid- ! pid})
+        products = products.filter(p => {p.pid- ! pid})
         
         if(products.length===currentLenght){
    
