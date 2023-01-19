@@ -23,12 +23,12 @@ routerCarts.post('/' , (req,res) =>{
 
     const carrito = req.body;
     carritos.push({
-        ...carrito,
-         id: uuidv4()
-     })
-    const nuevocarrito = {...req.body, id:uuidv4()};
-    carritos.push(nuevocarrito);
-    fs.writeFileSync("./carrito.json" , JSON.stringify(carritos),(err)=>{
+       ...carrito,
+        id: uuidv4()
+    })
+    const nuevoCarrito = {...req.body, id:uuidv4()};
+    carritos.push(nuevoCarrito);
+    fs.writeFileSync("./carts.json" , JSON.stringify(carritos),(err)=>{
     
         
     
@@ -36,9 +36,11 @@ routerCarts.post('/' , (req,res) =>{
         throw new Error(err)
         
     })
-    res.send('carrito agregado')
-    res.send(products);
+    res.send('producto agregado')
+    
     });
+   
+    
 
     module.exports =
     routerCarts;

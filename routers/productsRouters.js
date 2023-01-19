@@ -65,17 +65,16 @@ res.send('prodcutto modificado')
 
 
     routerProducts.delete('/:pid' , (req,res) =>{
-        const pid = req.params.id;
-        const product = req.body;
-        let currentLenght = products.lenght;
-
-        products = products.filter(p => {p.pid- ! pid})
-        
-        if(products.length===currentLenght){
-   
-    return res.status('404').send({status:error, error:"not user found"})
-        }
-        res.send({status:"succes", error:"usario borrado"})
+     
+        let arrayVacio =[ ];
+        const id = req.params.pid;
+        todoslosProductos.map((product) =>{
+            if(product.id !== id) arrayVacio.push(product)
+            console.log('arrayvacio' , arrayVacio)
+           
+        })
+        fs.writeFileSync('\productos.json', JSON.stringify(arrayVacio),);
+        res.send('producto eliminado');
         })
     
 
