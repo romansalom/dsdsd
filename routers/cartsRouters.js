@@ -2,7 +2,7 @@ const express = require("express");
 const routerCarts = express.Router();
 const fs = require("fs");
 const { v4: uuidv4} = require('uuid');
-const {products} = require('./productsRouters')
+const products = require('./productsRouters')
 
 
 let productosenelcarro = JSON.parse(fs.readFileSync("./productos.json" , 'utf-8'))
@@ -54,14 +54,24 @@ routerCarts.post('/' , (req,res) =>{
 
         const {cid} = req.params;
 
-        const idCart = carritos.find((c => c.id ===+cid ));
+        const index = carritos.find((c => c.id ===+cid ));
 
-        const carroid = idCart.carritos
+        const carroid = carritos.index;
 
-        res.send(idCart)
+        res.send(index)
 
         const {pid} = req.params;
-        const idProduct  = productosCarrito.find((p => p.id === +pid ));
+        const indexp  = products.findIndex((p => p.id ===+pid ));
+        const productId = products.indexp;
+        res.send(indexp);
+
+        if (products){
+           productosCarrito.push({
+            productId
+           })
+        }
+
+
     })
 
     module.exports =

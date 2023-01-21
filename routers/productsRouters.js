@@ -78,5 +78,6 @@ res.send('prodcutto modificado')
 
 
 module.exports =
-    routerProducts;
+    routerProducts,
+    todoslosProductos;
   
