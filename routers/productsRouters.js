@@ -28,11 +28,6 @@ routerProducts.get('/:pid',(req,res) =>{
 
 routerProducts.post('/' , (req,res) =>{
 
-const product = req.body;
-products.push({
-   ...product,
-    id: uuidv4()
-})
 const nuevoProducto = {...req.body, id:uuidv4()};
 products.push(nuevoProducto);
 fs.writeFileSync("./productos.json" , JSON.stringify(products),(err)=>{
