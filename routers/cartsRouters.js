@@ -2,14 +2,16 @@ const express = require("express");
 const routerCarts = express.Router();
 const fs = require("fs");
 const { v4: uuidv4} = require('uuid');
-const products = require('./productsRouters')
 
 
-let productosenelcarro = JSON.parse(fs.readFileSync("./productos.json" , 'utf-8'))
 
+let products = JSON.parse(fs.readFileSync("./productos.json" , 'utf-8'));
 
 const carritos = [];
 const productosCarrito = [];
+const todoslosProductos = [];
+
+todoslosProductos.push(...products);
 
 
 const todosloscaarts = JSON.parse(fs.readFileSync("./carrito.json" , "utf8", (error)=>{
@@ -50,29 +52,59 @@ routerCarts.post('/' , (req,res) =>{
         const carrito = carritos.find(c => c.id === cid);
         res.send(carrito) 
     })
+
+
+
     routerCarts.post('/:cid/products/:pid' , (req,res) => {
-
         const {cid} = req.params;
-
-        const index = carritos.find((c => c.id ===+cid ));
-
-        const carroid = carritos.index;
-
-        res.send(index)
+        const carritoAsignado = carritos.find((c => c.id = cid ));
 
         const {pid} = req.params;
-        const indexp  = products.findIndex((p => p.id ===+pid ));
-        const productId = products.indexp;
-        res.send(indexp);
+        const indexp  = todoslosProductos.find((p => p.id = pid ));
 
-        if (products){
-           productosCarrito.push({
-            productId
+       carritoAsignado.productosCarrito.map((e)=>{
+
+        if(e.id = indexp){
+            e.quantity++
+
+
+        }else {
+            carritoAsignado.productosCarrito.push({
+                iddelproducto : indexp.id,
+                quantity : 1
+             
            })
-        }
+     }
+
+     if(carritoAsignado.productosCarrito.lenght  < 1){
+
+        carritoAsignado.productosCarrito.push({
+            iddelproducto : indexp.id,
+            quantity : 1
+        })
+
+     }
 
 
+
+       })
+
+         
+
+           fs.writeFileSync("./carrito.json" , JSON.stringify(carritos),(err)=>{
+    
+        
+           
+       
+            throw new Error(err)
+            
+        })
+        
+
+
+res.send(carritoAsignado);
+
+    
     })
-
     module.exports =
     routerCarts;

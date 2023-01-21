@@ -3,9 +3,9 @@ const express = require("express");
 const routerProducts = express.Router();
 const fs = require("fs");
 const { v4: uuidv4} = require('uuid');
-const products = [
-    
-]
+
+
+const products = [];
 const todoslosProductos = JSON.parse(fs.readFileSync("./productos.json" , "utf8", (error)=>{
     throw Error(error)
 }));
@@ -79,5 +79,5 @@ res.send('prodcutto modificado')
 
 module.exports =
     routerProducts,
-    todoslosProductos;
+   {products};
   
