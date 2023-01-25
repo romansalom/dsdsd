@@ -4,107 +4,75 @@ const fs = require("fs");
 const { v4: uuidv4} = require('uuid');
 
 
-
-let products = JSON.parse(fs.readFileSync("./productos.json" , 'utf-8'));
-
-const carritos = [];
-const productosCarrito = [];
+//Array de productos
 const todoslosProductos = [];
-
+let products = JSON.parse(fs.readFileSync("./productos.json" , 'utf-8'));
 todoslosProductos.push(...products);
 
-
-const todosloscaarts = JSON.parse(fs.readFileSync("./carrito.json" , "utf8", (error)=>{
-    throw Error(error)
-
-}));
-carritos.push(...todosloscaarts);
-
-routerCarts.get('/',(req,res) =>{
-    res.send(carritos)
-});
+//Array de Carritos
+const carritos = [];
+const todosloscarts = JSON.parse(fs.readFileSync("./carrito.json" , "utf8", (error)=>{ throw Error(error) }));
+carritos.push(...todosloscarts);
 
 
+//Obtener los carritos
+routerCarts.get('/',(req,res) =>{ res.send(carritos) });
+
+
+//Crear un carrito
 routerCarts.post('/' , (req,res) =>{
     
-    const carrito = req.body;
-    carritos.push({
-       productosCarrito: [],
-        id: uuidv4()
-    })
-
+    carritos.push({ productosCarrito: [], id: uuidv4()})
+    fs.writeFileSync("./carrito.json" , JSON.stringify(carritos),(err)=>{ throw new Error(err) })
+    res.send('carrito creado')
     
-    fs.writeFileSync("./carrito.json" , JSON.stringify(carritos),(err)=>{
-    
-        
-    
-       
-        throw new Error(err)
-        
-    })
-    res.send('producto agregado', )
-    
-    });
+});
    
 
-    routerCarts.get('/:cid' ,(req,res)=>{
-        let {cid} = req.params;
-        const carrito = carritos.find(c => c.id === cid);
-        res.send(carrito) 
-    })
+//Obtener un carrito especifico
+routerCarts.get('/:cid' ,(req,res)=>{
+
+    let {cid} = req.params;
+    const carrito = carritos.find(c => c.id = cid);
+    res.send(carrito) 
+
+})
 
 
+//Insertar productos en un carrito
+routerCarts.post('/:cid/products/:pid' , (req,res) => {
 
-    routerCarts.post('/:cid/products/:pid' , (req,res) => {
+    //Tomamos el carrito desde el params
         const {cid} = req.params;
         const carritoAsignado = carritos.find((c => c.id = cid ));
 
+    //Tomamos el producto que vamos a insertar desde el params
         const {pid} = req.params;
         const indexp  = todoslosProductos.find((p => p.id = pid ));
 
-       carritoAsignado.productosCarrito.map((e)=>{
+        const productoRepetido = carritoAsignado.productosCarrito.find( e => e.id = pid )
 
-        if(e.id = indexp){
-            e.quantity++
+        if(productoRepetido){
+        
+            carritoAsignado.productosCarrito.map( ( element )=>{ if( element.id = pid ){ element.quantity++  } })
 
-
-        }else {
+        }
+        else
+        {
             carritoAsignado.productosCarrito.push({
+
                 iddelproducto : indexp.id,
                 quantity : 1
-             
-           })
-     }
+                
+                })
+        }
 
-     if(carritoAsignado.productosCarrito.lenght  < 1){
+        //Cargamos los cambios en el JSON 
+        fs.writeFileSync("./carrito.json" , JSON.stringify(carritos),(err)=>{ throw new Error(err) })
 
-        carritoAsignado.productosCarrito.push({
-            iddelproducto : indexp.id,
-            quantity : 1
-        })
-
-     }
-
-
-
-       })
-
-         
-
-           fs.writeFileSync("./carrito.json" , JSON.stringify(carritos),(err)=>{
+        //Retornamos una respuesta
+        res.send(carritoAsignado);
+ 
+})
     
-        
-           
-       
-            throw new Error(err)
-            
-        })
-        
-
-
-res.send(carritoAsignado);
-
-    
-    })
-    module.exports =
-    routerCarts;
+module.exports = routerCarts
