@@ -50,18 +50,18 @@ routerCarts.post('/:cid/products/:pid' , (req,res) => {
         const {pid} = req.params;
         const indexp  = todoslosProductos.find((p => p.id = pid ));
 
-        const productoRepetido = carritoAsignado.productosCarrito.find( e => e.id = pid )
+        const productoRepetido = carritoAsignado.productosCarrito.find( e => e.id === pid ) //cambiar = por ===
 
         if(productoRepetido){
         
-            carritoAsignado.productosCarrito.map( ( element )=>{ if( element.id = pid ){ element.quantity++  } })
+            carritoAsignado.productosCarrito.map( ( element )=>{ if( element.id === pid ){ element.quantity++ } }) //cambiar = por ===
 
         }
         else
         {
             carritoAsignado.productosCarrito.push({
 
-                iddelproducto : indexp.id,
+                id : indexp.id, //cambiar iddelproducto por id
                 quantity : 1
                 
                 })
@@ -75,4 +75,4 @@ routerCarts.post('/:cid/products/:pid' , (req,res) => {
  
 })
     
-module.exports = routerCarts
+module.exports = routerCarts;
