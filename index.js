@@ -40,8 +40,19 @@ socketServer.on('connection',  (socket)  =>{
 
     socket.emit('cargadeProductos' , products);
   })
+
+  socket.on("idaEliminar" , (id)=>{
+    let arrayVacio =[ ];
+    products.map((product) =>{
+        if(product.id !== id) arrayVacio.push(product)
+  
+    })
+    fs.writeFileSync("./productos.json" , JSON.stringify(arrayVacio) )
+    })
+
+    socket.emit('cargadeProductos' , products);
+  
+  })
   
 
 
-
-})

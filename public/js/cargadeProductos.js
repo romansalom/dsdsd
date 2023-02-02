@@ -30,3 +30,9 @@ formulario.addEventListener("submit" , (evento)=>{
    socket.on("productos" , cargaDeProductos());
 });
 
+formularioEliminar.addEventListener("submit" , (evento) =>{
+  evento.preventDefault();
+  let idaEliminar = document.querySelector("#idDelete").value;
+  socket.emit("idaEliminar" , idaEliminar );
+ 
+})
